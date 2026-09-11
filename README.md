@@ -1,23 +1,36 @@
 # JULIE
 
-Public site and materials for **JULIE**, an assisted system for scientific literature
-review. Domain: [meetjulie.org](https://meetjulie.org)
+Website for [JULIE](https://meetjulie.org), an assisted system for scientific
+literature review.
 
-JULIE supports researchers and policy makers who produce systematic reviews, clinical
-guidelines and health technology assessments. It is not a point of care decision support
-tool.
+The website is being prepared. This repository currently contains a temporary
+holding page and the hosting configuration.
 
-## Repository contents
+## Files
 
-| Path | Purpose |
-|---|---|
-| `index.html` | The public site |
-| `assets/` | Images, fonts and styles used by the site |
+- `public/`: files served by the website. No build step is required.
+- `.cpanel.yml`: copies `public/` into the domain's document root.
 
-## Status
+Only approved website files belong in this repository. Keep drafts, internal
+research, credentials, and private configuration outside it.
 
-Pre-launch. This repository is private until the site is ready to go live.
+## Hosting
 
-## Language
+The site uses cPanel Git Version Control with manual pull deployment.
+Clone `https://github.com/ConstantinTamas/meetjulie.git` into a directory outside
+the document root. Use the `main` branch.
 
-All public-facing content in this repository is in **English**.
+To publish an approved update:
+
+1. Commit the website files under `public/` and push to GitHub.
+2. In cPanel, open **Git Version Control > Manage > Pull or Deploy**.
+3. Click **Update from Remote**, then **Deploy HEAD Commit**.
+
+Pushing to GitHub alone does not publish an update to the website. Deployment
+copies files without deleting existing server files; removed or renamed pages
+need separate cleanup. Never put secrets in `public/`.
+
+When replacing the holding page, remove its temporary `noindex` directive from
+the final homepage.
+
+See [cPanel's deployment guide](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-deployment/).

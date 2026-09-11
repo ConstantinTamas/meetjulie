@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/openityh/meetjulie.org
+    - /bin/mkdir -p "$DEPLOYPATH"
+    - /bin/cp -R public/. "$DEPLOYPATH/"
