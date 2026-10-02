@@ -3,10 +3,63 @@
   var doc = document.documentElement;
   var cleanup = function () {};
 
+  /* ---------- first-visit news notice ----------
+     Shown once per browser, never twice in one document load. The flag is a
+     versioned localStorage key: a new piece of news gets a new key, so the old
+     flag simply stops mattering. Storage can be blocked or throw (private mode,
+     strict settings); then the notice falls back to "once per page load" and
+     nothing else breaks. It is marked seen the moment it is shown, so it never
+     follows the visitor from page to page. */
+  var NEWS_KEY = 'julie-news-2026-10-grade';
+  var newsDone = false;   // shown or skipped in this document load
+  var newsEl = null;      // the live notice, while it is on screen
+
+  function newsSeen() {
+    try { return window.localStorage.getItem(NEWS_KEY) === 'seen'; } catch (e) { return false; }
+  }
+  function markNewsSeen() {
+    try { window.localStorage.setItem(NEWS_KEY, 'seen'); } catch (e) { /* storage unavailable */ }
+  }
+  function closeNews() {
+    if (!newsEl) return;
+    var hadFocus = newsEl.contains(document.activeElement);
+    newsEl.remove();
+    newsEl = null;
+    markNewsSeen();
+    // Focus was never taken; only hand it back if the visitor was inside the notice.
+    if (hadFocus) {
+      var main = document.getElementById('main-content');
+      if (main) main.focus({preventScroll: true});
+    }
+  }
+  function buildNews() {
+    // The preview renders every page in one document behind a hash router,
+    // so the link has to use the router's form there.
+    var href = window.JULIE_PREVIEW
+      ? '#p/how-it-works?section=how-it-works-two-standards'
+      : 'how-it-works.html#two-standards';
+    var box = document.createElement('aside');
+    box.className = 'news';
+    box.setAttribute('aria-label', 'News');
+    box.innerHTML =
+      '<p class="news-eyebrow">New</p>' +
+      '<p class="news-text">Julie now works with both Oxford CEBM and GRADE.</p>' +
+      '<a class="onward news-link" href="' + href + '">How the two standards fit in<span aria-hidden="true">&#8594;</span></a>' +
+      '<button class="news-close" type="button" aria-label="Close the news notice">' +
+      '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false">' +
+      '<path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.25" fill="none"/></svg></button>';
+    return box;
+  }
+
   function init(scope) {
     cleanup();
     scope = scope || document;
     var observers = [];
+    var listeners = [];
+    function listen(target, type, handler) {
+      target.addEventListener(type, handler);
+      listeners.push([target, type, handler]);
+    }
     doc.classList.add('js', 'is-ready');
     var head = document.querySelector('.masthead');
     var toggle = document.querySelector('.menu-toggle');
@@ -28,7 +81,11 @@
         if (event.target.closest('a')) closeMenu(false);
       });
       head.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') closeMenu(true);
+        if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+          // Marked so the news notice leaves this Escape to the menu.
+          event.julieMenuClosed = true;
+          closeMenu(true);
+        }
       });
       head.addEventListener('focusout', function (event) {
         if (event.relatedTarget && !head.contains(event.relatedTarget)) closeMenu(false);
@@ -141,7 +198,52 @@
       });
     }
 
-    cleanup = function () { observers.forEach(function (observer) { observer.disconnect(); }); };
+    // The news notice. Pages that opt out (the privacy notice) carry
+    // data-news="off"; they neither show it nor use up the one showing.
+    var newsOff = !!scope.querySelector('[data-news="off"]');
+    if (!newsEl && !newsDone && !newsOff) {
+      newsDone = true;
+      if (!newsSeen()) {
+        newsEl = buildNews();
+        document.body.appendChild(newsEl);
+        markNewsSeen();
+      }
+    }
+    // Only the preview can route to an opted-out page with the notice still
+    // open (one document, many pages): there it steps out of sight, without
+    // listeners, and comes back on the next page. A real page never gets here.
+    if (newsEl) newsEl.hidden = newsOff;
+    if (newsEl && !newsOff) {
+      var notice = newsEl;
+      listen(notice.querySelector('.news-close'), 'click', closeNews);
+      // Removing a link inside its own click would cancel the navigation, so
+      // the notice leaves on the next tick, after the link has done its job.
+      listen(notice.querySelector('.news-link'), 'click', function () { setTimeout(closeNews, 0); });
+      listen(document, 'keydown', function (event) {
+        if (event.key !== 'Escape' || event.julieMenuClosed) return;
+        // An open mobile menu takes the first Escape, wherever the focus is.
+        if (toggle && toggle.getAttribute('aria-expanded') === 'true') return;
+        closeNews();
+      });
+      // The notice must not sit over the contact form: it steps aside for good
+      // once the form comes into view or receives focus.
+      var contactForm = scope.querySelector('#contact-form, form[action="contact.php"]');
+      if (contactForm) {
+        listen(contactForm, 'focusin', closeNews);
+        if ('IntersectionObserver' in window) {
+          var formWatch = new IntersectionObserver(function (entries) {
+            if (entries.some(function (entry) { return entry.isIntersecting; })) closeNews();
+          });
+          formWatch.observe(contactForm);
+          observers.push(formWatch);
+        }
+      }
+    }
+
+    cleanup = function () {
+      observers.forEach(function (observer) { observer.disconnect(); });
+      listeners.forEach(function (entry) { entry[0].removeEventListener(entry[1], entry[2]); });
+    };
   }
   window.JulieSite = {init: init};
   if (!window.JULIE_PREVIEW) init(document);
