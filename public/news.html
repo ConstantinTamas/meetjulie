@@ -5,17 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>News &middot; Meet Julie</title>
 <meta name="description" content="News from Julie: what has changed, newest first, each item with its date.">
-<link rel="stylesheet" href="assets/site.css?v=20261015-newspage">
-<script src="assets/site.js?v=20261015-newspage" defer></script>
+<link rel="stylesheet" href="assets/site.css?v=20261015-newstiles">
+<script src="assets/site.js?v=20261015-newstiles" defer></script>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="assets/favicon.png" type="image/png" sizes="32x32">
 <link rel="canonical" href="https://meetjulie.org/news.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="JULIE">
-<!-- The share preview describes the newest entry: when a new entry goes on top,
-     og:title and og:description change with it. -->
-<meta property="og:title" content="Checking the reference: 50 numbers, no numerical corrections">
-<meta property="og:description" content="A source check of four published COPD trials confirmed every numerical entry in an AI-assisted reference set. Six descriptive entries needed clarification.">
+<meta property="og:title" content="News &middot; Meet Julie">
+<meta property="og:description" content="What has changed in Julie, newest first, each item with its date.">
 <meta property="og:url" content="https://meetjulie.org/news.html">
 <meta property="og:image" content="https://meetjulie.org/assets/social-preview.png">
 <meta property="og:image:width" content="1200">
@@ -48,11 +46,13 @@
 <main id="main-content" tabindex="-1">
 
 <!-- ===== NEWS =====
-     Newest first. Each entry keeps its date and its id; a later change gets an
-     entry of its own rather than an edit. The id is the link that gets shared
-     (news.html#2026-10-grade), and the first-visit notice in assets/site.js
-     announces the newest entry by it. data-news="seen": the notice does not
-     show on this page, and a visit here counts as having seen it. -->
+     One tile per item, newest first: date and category, headline, a two-sentence
+     summary, and a way on to where the full text lives (its own
+     news-YYYY-MM-name.html page or, for a short item, the section that carries
+     it). The tile's id is the item's anchor on this page and does not change, so
+     links already shared (news.html#2026-10-reference-check) still land on it.
+     data-news="seen": the first-visit notice does not show here, and a visit
+     counts as having seen it. -->
 <section id="news" data-news="seen">
   <div class="wrap stack">
     <div class="sec-head">
@@ -61,44 +61,19 @@
       <p class="lede">Newest first, each with its date. When something changes later, it gets an item of its own, and the earlier ones stay as they were.</p>
     </div>
 
-    <div class="newslist">
-      <article class="entry" id="2026-10-reference-check">
-        <p class="entry-date"><time datetime="2026-10-15">15 October 2026</time></p>
-        <h2>Checking the reference: 50 numbers, no numerical corrections</h2>
-        <p>A source check of four published COPD trials confirmed every numerical entry in an AI-assisted reference set. Six descriptive entries needed clarification. The distinction matters when we assess what AI can contribute to research.</p>
-        <p>Before measuring how well a system extracts evidence, we need confidence in the reference against which its answers will be checked. For this part of Julie’s evaluation work, an AI assistant helped prepare 104 reference entries from four published randomised COPD trials. A medical colleague then checked every entry against the printed articles, with the proposed answers visible.</p>
-        <p>The reference included numerical values, records of information that was not printed, and descriptions of what each result represented. These categories tell different parts of the story:</p>
-        <table class="tbl comparison-table" role="table" aria-label="What was checked, and what the review found">
-          <thead role="rowgroup">
-            <tr role="row"><th scope="col" role="columnheader">What was checked</th><th scope="col" role="columnheader">What the review found</th></tr>
-          </thead>
-          <tbody role="rowgroup">
-            <tr role="row">
-              <th scope="row" role="rowheader">50 numerical entries, including values derived from published numbers</th>
-              <td role="cell">All confirmed; no numerical correction required</td>
-            </tr>
-            <tr role="row">
-              <th scope="row" role="rowheader">17 entries recording information as not printed</th>
-              <td role="cell">All confirmed</td>
-            </tr>
-            <tr role="row">
-              <th scope="row" role="rowheader">37 descriptive entries</th>
-              <td role="cell">31 clear; six flagged for clarification</td>
-            </tr>
-          </tbody>
-        </table>
-        <p>The six questions concerned descriptions of the results, such as the treatment arm, timing, or the meaning of a reported value. Four concerned wording or where the supporting information appeared in the article. In two, the reference description was more specific than the paper explicitly stated.</p>
-        <p>The lead researcher checked all six against the source text in a second review. The reference values remained unchanged, and clarifications were recorded in the notes. The six clarifications resolved questions about the descriptions; they did not involve changing numerical values.</p>
-        <p>This is a useful result with a defined scope. One reviewer checked the complete reference, and the second review covered the six flagged entries. The review was not blinded, and the data were not independently extracted by two human readers. Seeing a proposed answer can influence a reviewer’s judgement. The result therefore provides confirmation of this reference set; it cannot establish inter-reader agreement or an overall accuracy rate for Julie.</p>
-        <p>The practical lesson is that accurate numbers and careful descriptions both deserve attention. Here, the human check found no numerical corrections to make, while it identified two descriptions that went beyond the paper’s explicit wording. Those distinctions can disappear behind a single headline percentage.</p>
-        <p>For researchers, the useful question is what was checked, against which source, and what required clarification. In these four trials, the answer is specific: 50 numerical entries confirmed without correction, six descriptive questions resolved, and a record of the human review behind that conclusion.</p>
+    <div class="newsgrid">
+      <article class="newstile" id="2026-10-reference-check">
+        <p class="newsmeta"><time datetime="2026-10-15">15 October 2026</time> &middot; Evaluation</p>
+        <h2><a href="news-2026-10-reference-check.html">Checking the reference: 50&nbsp;numbers, no numerical corrections</a></h2>
+        <p>A source check of four published COPD trials confirmed every numerical entry in an AI-assisted reference set. Six descriptive entries needed clarification.</p>
+        <span class="onward" aria-hidden="true">Read the article<span>&#8594;</span></span>
       </article>
 
-      <article class="entry" id="2026-10-grade">
-        <p class="entry-date"><time datetime="2026-10-02">2 October 2026</time></p>
-        <h2>Julie now works with both Oxford CEBM and GRADE</h2>
-        <p>You choose the standard for each project at the outset, because it shapes what is extracted, how it is rated and what you receive. Oxford CEBM rates each study, with a level of evidence and a strength of recommendation. GRADE rates the body of evidence for each outcome of each question, as high, moderate, low or very low certainty, with the reasoning set out domain by domain.</p>
-        <a class="onward" href="how-it-works.html#two-standards">How the two standards fit in<span aria-hidden="true">&#8594;</span></a>
+      <article class="newstile" id="2026-10-grade">
+        <p class="newsmeta"><time datetime="2026-10-02">2 October 2026</time> &middot; Product</p>
+        <h2><a href="how-it-works.html#two-standards">Julie now works with both Oxford CEBM and GRADE</a></h2>
+        <p>You choose the standard for each project at the outset, because it shapes what is extracted, how it is rated and what you receive.</p>
+        <span class="onward" aria-hidden="true">How the two standards fit in<span>&#8594;</span></span>
       </article>
     </div>
   </div>

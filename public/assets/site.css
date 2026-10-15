@@ -99,7 +99,7 @@ textarea:focus-visible,
 .topnav{margin-left:auto}
 .topnav ul{display:flex;flex-wrap:wrap;gap:.25rem 1rem}
 .topnav a{display:block;padding:.6rem 0;font:.81rem/1.45 var(--mono);color:var(--ink-2);text-decoration:none}
-.topnav a:hover,.topnav a[aria-current="page"]{color:var(--ink);text-decoration:underline;text-underline-offset:.4em}
+.topnav a:hover,.topnav a[aria-current="page"],.topnav a[aria-current="true"]{color:var(--ink);text-decoration:underline;text-underline-offset:.4em}
 .masthead .mast-cta{padding:.7rem .9rem;font-size:.69rem;letter-spacing:.08em}
 .menu-toggle{display:none;font:500 .83rem/1.5 var(--mono);border:0;border-bottom:1px solid var(--ink);border-radius:0;background:transparent;color:var(--ink);min-height:44px;padding:.5rem .2rem;cursor:pointer}
 @media(max-width:71.99rem){
@@ -159,8 +159,8 @@ main > section:first-child{padding-block:clamp(4rem,8vw,7rem) clamp(5.5rem,10vw,
 /* An anchor lands below the masthead, never under it. The script measures the bar
    and writes --head; the fallbacks are for the page with no JavaScript, where the
    header keeps its full height. */
-section[id],.entry[id]{scroll-margin-top:calc(var(--head,9.75rem) + 1.25rem)}
-@media (min-width:64rem){section[id],.entry[id]{scroll-margin-top:calc(var(--head,5.5rem) + 1.25rem)}}
+section[id],.newstile[id]{scroll-margin-top:calc(var(--head,9.75rem) + 1.25rem)}
+@media (min-width:64rem){section[id],.newstile[id]{scroll-margin-top:calc(var(--head,5.5rem) + 1.25rem)}}
 .stack{display:flex;flex-direction:column;gap:clamp(3rem,6vw,4.75rem)}
 
 .eyebrow{display:flex;align-items:center;gap:.75rem;margin-bottom:1.15rem;
@@ -544,19 +544,43 @@ footer{background:var(--surface);padding-block:clamp(3.5rem,6vw,5rem) clamp(4rem
 .film-transcript-body p + p{margin-top:.8rem}
 .film-sources{margin-top:1.25rem}
 
-/* ---------- the News page ----------
-   A dated list, newest first, set like the rest of the site: hairlines and air,
-   no cards, no ochre. The date is metadata, so it is mono, in the eyebrow's
-   register. Each entry carries its own id, so a single item can be linked to
-   and shared; the first-visit notice below links to the newest one. */
-.newslist{max-width:46rem;border-top:1px solid var(--rule-strong)}
-.entry{padding-block:2.1rem 2.5rem;border-bottom:1px solid var(--rule)}
-.entry-date{margin-bottom:.85rem;font-family:var(--mono);font-size:.69rem;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--ink-2)}
-.entry h2{font-size:clamp(1.45rem,2.6vw,1.7rem);font-weight:500;letter-spacing:-.01em;margin-bottom:.9rem}
-.entry p + p{margin-top:.9rem}
-.entry .onward{margin-top:1.5rem}
-.entry .comparison-table{margin-block:1.6rem 1.7rem}
+/* ---------- News: the tiles and the article ----------
+   Tiles on a hairline grid, the way "Who it is for" sets its ledger: no box, no
+   shadow, no radius, no ochre. The date line is metadata, so it is mono. A tile
+   is one link: the headline carries it, and a stretched hit area lets the whole
+   tile answer the pointer, so the keyboard meets one stop per tile. The onward
+   line is drawn, not linked, and sits on the tile's floor, so the arrows in a
+   row line up. Two columns from 58rem; a lone last tile takes the whole row. */
+.newsmeta{font-family:var(--mono);font-size:.69rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
+.newsgrid{display:grid;grid-template-columns:minmax(0,1fr);border-top:1px solid var(--rule-strong)}
+.newstile{position:relative;display:flex;flex-direction:column;padding:2rem 0 2.25rem;border-bottom:1px solid var(--rule)}
+.newstile h2{margin:.85rem 0;font-size:clamp(1.45rem,2.3vw,1.8rem);font-weight:500;line-height:1.18;letter-spacing:-.01em}
+.newstile h2 a{color:var(--ink);text-decoration:none}
+.newstile h2 a::after{content:"";position:absolute;inset:0}
+.newstile p:not(.newsmeta){max-width:34rem;color:var(--ink-2)}
+.newstile .onward{margin-top:auto;padding-top:1.6rem}
+.newstile:hover h2 a{text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.16em}
+.newstile:hover .onward{color:var(--ink)}
+.newstile:hover .onward span{transform:translateX(.3rem)}
+@supports selector(:has(*)){
+  .newstile h2 a:focus-visible{outline:none}
+  .newstile:has(h2 a:focus-visible){outline:2px solid var(--ink);outline-offset:-2px}
+}
+@media (min-width:58rem){
+  .newsgrid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .newstile{padding:2.4rem 2.75rem 2.6rem 0}
+  .newstile:nth-child(even){padding:2.4rem 0 2.6rem 2.75rem;border-left:1px solid var(--rule)}
+  .newstile:nth-child(odd):last-child{grid-column:1/-1;padding-right:0}
+}
+/* The article: the head every page has, the date line under the headline, the
+   standfirst as the lede, and a reading measure for the body. */
+.eyebrow a{color:inherit;text-decoration:none}
+.eyebrow a:hover,.eyebrow a:focus-visible{color:var(--ink)}
+.newshead .newsmeta{margin:-.35rem 0 1.6rem}
+.newsbody{max-width:38rem;border-top:1px solid var(--rule-strong);padding-top:2.4rem}
+.newsbody p + p{margin-top:1.05rem}
+.newsbody .comparison-table{margin-block:1.9rem 2rem}
+.newsbody .onward{margin-top:2.75rem}
 
 /* ---------- first-visit news notice (built by site.js) ----------
    Non-modal, and meant to be seen: an inverted block, ink ground with paper

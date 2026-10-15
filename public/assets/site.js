@@ -11,12 +11,13 @@
      settings); then the notice falls back to "once per page load" and nothing
      else breaks. It is marked seen the moment it is shown, so it never follows
      the visitor from page to page.
-     A new entry on news.html changes all three values together: a new key, the
-     entry's headline, and the id the entry carries on the News page. */
+     A new item changes all three values together: a new key, the headline, and
+     where its full text lives (its own news-YYYY-MM-name.html page, or for a
+     short item the section that carries it). */
   var NEWS = {
     key: 'julie-news-2026-10-reference',
     text: 'Checking the reference: 50 numbers, no numerical corrections.',
-    entry: '2026-10-reference-check'
+    href: 'news-2026-10-reference-check.html'
   };
   var newsDone = false;   // shown or skipped in this document load
   var newsEl = null;      // the live notice, while it is on screen
@@ -39,12 +40,16 @@
       if (main) main.focus({preventScroll: true});
     }
   }
+  // The preview renders every page in one document behind a hash router; this
+  // turns a page link into the router's form, as relink() in make-site-preview.py does.
+  function previewHref(href) {
+    var parts = href.split('#');
+    var page = parts[0].replace(/\.html$/, '');
+    if (!page || page === 'index') page = 'home';
+    return '#p/' + page + (parts[1] ? '?section=' + page + '-' + parts[1] : '');
+  }
   function buildNews() {
-    // The preview renders every page in one document behind a hash router,
-    // so the link has to use the router's form there.
-    var href = window.JULIE_PREVIEW
-      ? '#p/news?section=news-' + NEWS.entry
-      : 'news.html#' + NEWS.entry;
+    var href = window.JULIE_PREVIEW ? previewHref(NEWS.href) : NEWS.href;
     var box = document.createElement('aside');
     box.className = 'news';
     box.setAttribute('aria-label', 'News');
