@@ -4,21 +4,28 @@
   var cleanup = function () {};
 
   /* ---------- first-visit news notice ----------
-     Shown once per browser, never twice in one document load. The flag is a
-     versioned localStorage key: a new piece of news gets a new key, so the old
-     flag simply stops mattering. Storage can be blocked or throw (private mode,
-     strict settings); then the notice falls back to "once per page load" and
-     nothing else breaks. It is marked seen the moment it is shown, so it never
-     follows the visitor from page to page. */
-  var NEWS_KEY = 'julie-news-2026-10-grade';
+     Shown once per browser, never twice in one document load. It announces the
+     newest entry on the News page and links to it. The flag is a versioned
+     localStorage key: a new piece of news gets a new key, so the old flag simply
+     stops mattering. Storage can be blocked or throw (private mode, strict
+     settings); then the notice falls back to "once per page load" and nothing
+     else breaks. It is marked seen the moment it is shown, so it never follows
+     the visitor from page to page.
+     A new entry on news.html changes all three values together: a new key, the
+     entry's headline, and the id the entry carries on the News page. */
+  var NEWS = {
+    key: 'julie-news-2026-10-reference',
+    text: 'Checking the reference: 50 numbers, no numerical corrections.',
+    entry: '2026-10-reference-check'
+  };
   var newsDone = false;   // shown or skipped in this document load
   var newsEl = null;      // the live notice, while it is on screen
 
   function newsSeen() {
-    try { return window.localStorage.getItem(NEWS_KEY) === 'seen'; } catch (e) { return false; }
+    try { return window.localStorage.getItem(NEWS.key) === 'seen'; } catch (e) { return false; }
   }
   function markNewsSeen() {
-    try { window.localStorage.setItem(NEWS_KEY, 'seen'); } catch (e) { /* storage unavailable */ }
+    try { window.localStorage.setItem(NEWS.key, 'seen'); } catch (e) { /* storage unavailable */ }
   }
   function closeNews() {
     if (!newsEl) return;
@@ -36,18 +43,20 @@
     // The preview renders every page in one document behind a hash router,
     // so the link has to use the router's form there.
     var href = window.JULIE_PREVIEW
-      ? '#p/how-it-works?section=how-it-works-two-standards'
-      : 'how-it-works.html#two-standards';
+      ? '#p/news?section=news-' + NEWS.entry
+      : 'news.html#' + NEWS.entry;
     var box = document.createElement('aside');
     box.className = 'news';
     box.setAttribute('aria-label', 'News');
     box.innerHTML =
       '<p class="news-eyebrow">New</p>' +
-      '<p class="news-text">Julie now works with both Oxford CEBM and GRADE.</p>' +
-      '<a class="onward news-link" href="' + href + '">How the two standards fit in<span aria-hidden="true">&#8594;</span></a>' +
+      '<p class="news-text"></p>' +
+      '<a class="onward news-link" href="' + href + '">Read it on the News page<span aria-hidden="true">&#8594;</span></a>' +
       '<button class="news-close" type="button" aria-label="Close the news notice">' +
       '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false">' +
       '<path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.25" fill="none"/></svg></button>';
+    // Set as text, so a headline with "&" or "<" in it stays a headline.
+    box.querySelector('.news-text').textContent = NEWS.text;
     return box;
   }
 
@@ -198,9 +207,18 @@
       });
     }
 
-    // The news notice. Pages that opt out (the privacy notice) carry
-    // data-news="off"; they neither show it nor use up the one showing.
-    var newsOff = !!scope.querySelector('[data-news="off"]');
+    // The news notice. Pages that step aside carry data-news. With "off" (the
+    // privacy notice) they neither show it nor use up the one showing. With
+    // "seen" (the News page, which carries the entry itself) they do not show
+    // it and count as having shown it.
+    var newsMark = scope.querySelector('[data-news]');
+    var newsMode = newsMark ? newsMark.getAttribute('data-news') : '';
+    if (newsMode === 'seen') {
+      newsDone = true;
+      markNewsSeen();
+      closeNews();   // only the preview arrives here with the notice still open
+    }
+    var newsOff = newsMode === 'off' || newsMode === 'seen';
     if (!newsEl && !newsDone && !newsOff) {
       newsDone = true;
       if (!newsSeen()) {
@@ -209,8 +227,8 @@
         markNewsSeen();
       }
     }
-    // Only the preview can route to an opted-out page with the notice still
-    // open (one document, many pages): there it steps out of sight, without
+    // Only the preview can route to an "off" page with the notice still open
+    // (one document, many pages): there it steps out of sight, without
     // listeners, and comes back on the next page. A real page never gets here.
     if (newsEl) newsEl.hidden = newsOff;
     if (newsEl && !newsOff) {

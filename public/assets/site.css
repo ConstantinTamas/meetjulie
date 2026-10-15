@@ -159,8 +159,8 @@ main > section:first-child{padding-block:clamp(4rem,8vw,7rem) clamp(5.5rem,10vw,
 /* An anchor lands below the masthead, never under it. The script measures the bar
    and writes --head; the fallbacks are for the page with no JavaScript, where the
    header keeps its full height. */
-section[id]{scroll-margin-top:calc(var(--head,9.75rem) + 1.25rem)}
-@media (min-width:64rem){section[id]{scroll-margin-top:calc(var(--head,5.5rem) + 1.25rem)}}
+section[id],.entry[id]{scroll-margin-top:calc(var(--head,9.75rem) + 1.25rem)}
+@media (min-width:64rem){section[id],.entry[id]{scroll-margin-top:calc(var(--head,5.5rem) + 1.25rem)}}
 .stack{display:flex;flex-direction:column;gap:clamp(3rem,6vw,4.75rem)}
 
 .eyebrow{display:flex;align-items:center;gap:.75rem;margin-bottom:1.15rem;
@@ -543,6 +543,20 @@ footer{background:var(--surface);padding-block:clamp(3.5rem,6vw,5rem) clamp(4rem
 .film-transcript-body{padding-bottom:1.25rem;font-size:1.02rem;line-height:1.6;color:var(--ink-2)}
 .film-transcript-body p + p{margin-top:.8rem}
 .film-sources{margin-top:1.25rem}
+
+/* ---------- the News page ----------
+   A dated list, newest first, set like the rest of the site: hairlines and air,
+   no cards, no ochre. The date is metadata, so it is mono, in the eyebrow's
+   register. Each entry carries its own id, so a single item can be linked to
+   and shared; the first-visit notice below links to the newest one. */
+.newslist{max-width:46rem;border-top:1px solid var(--rule-strong)}
+.entry{padding-block:2.1rem 2.5rem;border-bottom:1px solid var(--rule)}
+.entry-date{margin-bottom:.85rem;font-family:var(--mono);font-size:.69rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--ink-2)}
+.entry h2{font-size:clamp(1.45rem,2.6vw,1.7rem);font-weight:500;letter-spacing:-.01em;margin-bottom:.9rem}
+.entry p + p{margin-top:.9rem}
+.entry .onward{margin-top:1.5rem}
+.entry .comparison-table{margin-block:1.6rem 1.7rem}
 
 /* ---------- first-visit news notice (built by site.js) ----------
    Non-modal, and meant to be seen: an inverted block, ink ground with paper
