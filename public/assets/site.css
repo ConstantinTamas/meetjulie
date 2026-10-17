@@ -619,7 +619,7 @@ footer{background:var(--surface);padding-block:clamp(3.5rem,6vw,5rem) clamp(4rem
 @media print{.news{display:none}}
 
 /* ---------- branch strip: the systematic review pages ----------
-   The site has two ways to work with Julie. The three systematic review pages
+   The site has two ways to work with Julie. The two systematic review pages
    carry this strip under the masthead; the top menu marks the branch. */
 .branchnav{border-bottom:1px solid var(--rule);padding-block:.95rem}
 .branchnav ul{display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;list-style:none;margin:0;padding:0;
@@ -645,3 +645,16 @@ footer{background:var(--surface);padding-block:clamp(3.5rem,6vw,5rem) clamp(4rem
 /* Two statements side by side on a wide screen (how-it-works: search, two standards). */
 .stmt-pair{display:grid;gap:3rem;align-items:start}
 @media(min-width:62rem){.stmt-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(3rem,5vw,4.5rem)}}
+
+/* ---------- reading pages: one centred column ----------
+   Most pages fill their width with a diagram, a chain or a two-column ledger.
+   A page of running text only (questions, privacy, a news article) sits in the
+   middle instead, like a page of a book; the closing invitation under it
+   follows the same column. */
+.reading .wrap > *,.reading ~ .pageclose .wrap > *{width:100%;max-width:46rem;margin-inline:auto}
+#article.reading .newshead,#article.reading .newsbody{max-width:40rem}
+#article.reading ~ .pageclose .wrap > *{max-width:40rem}
+
+/* Seven menu items: on the narrowest screens that show the full menu, the
+   domain beside the mark gives way, so the menu keeps its air. */
+@media(min-width:72rem) and (max-width:79.99rem){.masthead .domain{display:none}}
