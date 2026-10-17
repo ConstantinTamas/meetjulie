@@ -617,3 +617,18 @@ footer{background:var(--surface);padding-block:clamp(3.5rem,6vw,5rem) clamp(4rem
 }
 @keyframes news-in{from{opacity:0;transform:translateY(.5rem)}}
 @media print{.news{display:none}}
+
+/* ---------- branch strip: the systematic review pages ----------
+   The site has two ways to work with Julie. The three systematic review pages
+   carry this strip under the masthead; the top menu marks the branch. */
+.branchnav{border-bottom:1px solid var(--rule);padding-block:.95rem}
+.branchnav ul{display:flex;flex-wrap:wrap;gap:.5rem 1.6rem;list-style:none;margin:0;padding:0;
+  font-family:var(--mono);font-size:.69rem;letter-spacing:.18em;text-transform:uppercase}
+.branchnav-name{color:var(--ink);font-weight:500}
+.branchnav a{color:var(--ink-2);text-decoration:none}
+.branchnav a:hover,.branchnav a[aria-current="page"]{color:var(--ink);text-decoration:underline;text-underline-offset:.4em}
+/* A table with one value per reader: on a phone the header row is hidden, so each value names its reader. */
+@media(max-width:47.99rem){
+  .reader-table tbody td{display:block}
+  .reader-table tbody td::before{content:attr(data-label) " \00b7  ";font-family:var(--mono);font-size:.69rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
+}
