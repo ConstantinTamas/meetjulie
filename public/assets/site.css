@@ -632,3 +632,16 @@ footer{background:var(--surface);padding-block:clamp(3.5rem,6vw,5rem) clamp(4rem
   .reader-table tbody td{display:block}
   .reader-table tbody td::before{content:attr(data-label) " \00b7  ";font-family:var(--mono);font-size:.69rem;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-2)}
 }
+
+/* ---------- a page head with a chain beside it (meta-analysis) ----------
+   Like the home page hero: the heading on the left, the steps on the right. */
+.page-grid{display:grid;gap:2.75rem;align-items:start}
+.page-intro{max-width:var(--measure);margin-top:2.25rem}
+@media(min-width:62rem){
+  .page-grid{grid-template-columns:minmax(0,1fr) minmax(0,26rem);gap:clamp(3rem,6vw,4.5rem)}
+  .page-aside{padding-top:.5rem}
+}
+
+/* Two statements side by side on a wide screen (how-it-works: search, two standards). */
+.stmt-pair{display:grid;gap:3rem;align-items:start}
+@media(min-width:62rem){.stmt-pair{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(3rem,5vw,4.5rem)}}
