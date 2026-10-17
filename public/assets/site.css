@@ -666,3 +666,7 @@ footer{background:var(--surface);padding-block:clamp(3.5rem,6vw,5rem) clamp(4rem
 /* the closing links of an article, one per line */
 .newsbody > .onward{display:flex;width:fit-content}
 .newsbody > .onward + .onward{margin-top:1.1rem}
+
+/* home, what you get: two columns of claims, each closing with its way on */
+#what-you-get .stmt-pair .subhead{margin-bottom:1.1rem}
+#what-you-get .stmt-pair .onward{margin-top:1.6rem}
