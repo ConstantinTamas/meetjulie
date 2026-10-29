@@ -1,10 +1,10 @@
 # JULIE
 
-Website for [JULIE](https://meetjulie.org), an assisted system for scientific
-literature review.
+Website for [JULIE](https://meetjulie.org), a research instrument for evidence
+synthesis.
 
-The website is being prepared. This repository currently contains a temporary
-holding page and the hosting configuration.
+The site is live at https://meetjulie.org. This repository holds the published
+pages and the hosting configuration.
 
 ## Files
 
@@ -29,8 +29,5 @@ To publish an approved update:
 Pushing to GitHub alone does not publish an update to the website. Deployment
 copies files without deleting existing server files; removed or renamed pages
 need separate cleanup. Never put secrets in `public/`.
-
-When replacing the holding page, remove its temporary `noindex` directive from
-the final homepage.
 
 See [cPanel's deployment guide](https://docs.cpanel.net/knowledge-base/web-services/guide-to-git-set-up-deployment/).
