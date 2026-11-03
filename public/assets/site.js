@@ -15,9 +15,9 @@
      where its full text lives (its own news-YYYY-MM-name.html page, or for a
      short item the section that carries it). */
   var NEWS = {
-    key: 'julie-news-2026-11-guideline-check',
-    text: 'A test that can fail: Julie and two recommendations a guideline graded differently.',
-    href: 'news-2026-11-guideline-check.html'
+    key: 'julie-news-2026-11-web-version',
+    text: 'Julie’s web version: a first test against a published guideline.',
+    href: 'news-2026-11-web-version.html'
   };
   var newsDone = false;   // shown or skipped in this document load
   var newsEl = null;      // the live notice, while it is on screen
